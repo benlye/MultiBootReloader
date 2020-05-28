@@ -32,44 +32,34 @@ static void GPIO_Init()
 }
 
 /*
- * Handle for Timer 2
-*/
-static TIM_HandleTypeDef hTIM2;
-
-/*
  * Initializes Timer 2
-  * Frequency is 30Hz: 72000000 / ((239+1) * (9999+1)) = 30
+ * Configures TIM2 without using the HAL functions so that we can redefine the IRQ handler.
+ * Frequency is 30Hz: 72000000 / ((239+1) * (9999+1)) = 30
  */
 static void Timer_Init()
 {
 	__HAL_RCC_TIM2_CLK_ENABLE();	// Enable the clock
-
-	hTIM2.Instance = TIM2;
-	hTIM2.Init.Prescaler = 9999;
-	hTIM2.Init.CounterMode = TIM_COUNTERMODE_UP;
-	hTIM2.Init.Period = 239;
-	hTIM2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	hTIM2.Init.RepetitionCounter = 0;
-	HAL_TIM_Base_Init(&hTIM2);
-
+	TIM2->CNT = 0;					// Zero the count
+	TIM2->PSC = 239;				// Prescaler
+	TIM2->ARR = 9999;				// Period
+	TIM2->DIER = TIM_DIER_UIE;		// Update interrupt enable
+	TIM2->CR1 |= TIM_CR1_CEN;		// Enable the timer
+	
 }
 
 /*
  * Timer 2 interrupt handler override
  * Update interrupts are used to flash the red LED when the bootloader is active.
  */
-extern "C" void TIM2_IRQHandler()
-{
-	HAL_TIM_IRQHandler(&hTIM2);
-}
+extern "C" 	void TIM2_IRQHandler(void) {
+	// Handle update interrupts (update interrupt flag is set)
+	if (TIM2->SR & TIM_SR_UIF) {
+		// Reset the update interrupt flag
+		TIM2->SR &= ~(TIM_SR_UIF);
 
-/*
- * Timer 2 update interrupt callback handler
- */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
-{
-	// Toggle the LED pin
-	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+		// Toggle the LED
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+	}
 }
 
 /*
@@ -154,7 +144,7 @@ void setup()
 void loop()
 {
 	// Start blinking the LED really fast so the user knows we're doing scary stuff
-	HAL_TIM_Base_Start_IT(&hTIM2);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1000);
 
 	// Unlock the flash
@@ -164,7 +154,7 @@ void loop()
 	writeBootloader();
 		
 	// Stop blinking the LED
-	HAL_TIM_Base_Stop(&hTIM2);
+	HAL_NVIC_DisableIRQ(TIM2_IRQn);
 
 	// Turn the LED on for 1s to show we finished writing
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
