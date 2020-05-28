@@ -1,0 +1,5 @@
+# StmMultiBoot build property overrides
+#
+
+build.openocdscript=target/stm32f3x.cfg 
+tools.openocd.debug.build.openocdscript=C:\ProgramData\VMicro\tools\openocd-0.10.0.20200213\scripts/target/stm32f3x.cfg 
