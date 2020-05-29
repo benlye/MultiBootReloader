@@ -44,12 +44,11 @@ static void Timer_Init()
 	TIM2->ARR = 9999;				// Period
 	TIM2->DIER = TIM_DIER_UIE;		// Update interrupt enable
 	TIM2->CR1 |= TIM_CR1_CEN;		// Enable the timer
-	
 }
 
 /*
  * Timer 2 interrupt handler override
- * Update interrupts are used to flash the red LED when the bootloader is active.
+ * Update interrupts are used to flash the red LED when the flash is being written.
  */
 extern "C" 	void TIM2_IRQHandler(void) {
 	// Handle update interrupts (update interrupt flag is set)
@@ -63,7 +62,7 @@ extern "C" 	void TIM2_IRQHandler(void) {
 }
 
 /*
- * Writes the bootloader data to the module's flash memory
+ * Writes the bootloader data to the module's flash memory.
  */
 void writeBootloader() {
 
