@@ -1,11 +1,10 @@
+@ECHO OFF
 REM
 REM Script to install the MULTI-BootReloader app on a MULTI-MODULE.
 REM The BootReloader app can be used to upgrade the bootloader on a MULTI-Module without requiring a USB-to-serial adapter.
 REM
 REM https://github.com/benlye/MultiBootReloader
 REM
-
-@ECHO OFF 
 
 SET COMPORT=%1
 IF "%COMPORT%" EQU "" GOTO NOCOMPORT
