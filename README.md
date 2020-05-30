@@ -62,6 +62,11 @@ Once the LED has gone off, and remains off for more than 5sec, the module can be
 
 When the module is unplugged and plugged back in, the red LED will blink continuously.  This indicates that it is in bootloader mode and ready to receive firmware.  Use Flash Multi or your radio to write new firmware to the module.
 
+## Video
+This video shows the BootReloader working, including the state of the MULTI-Module as it is updated.
+
+[![Video of BootReloader doing its thing.](http://img.youtube.com/vi/wrGWF0qd2Xo/0.jpg)](http://www.youtube.com/watch?v=wrGWF0qd2Xo "MULTI-BootlReloader")
+
 ## Troubleshooting
 If the process goes wrong there is a chance that the bootloader will become corrupt.  If this happens the module will be unusable until you use a USB-to-Serial adapter (e.g. CP2102 or CH340G) to reprogram the it.  Depending on your MULTI-Module, you may have to solder pins onto it in order to do this.
 
