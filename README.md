@@ -60,6 +60,8 @@ The red LED will:
 
 Once the LED has gone off, and remains off for more than 5sec, the module can be unplugged.
 
+**Note:** It is safe to unplug the module if the red LED remains on solid for more than 30s after the update.  This has been reported to happen on TMX5 MULTI-Modules and is being investigated.
+
 When the module is unplugged and plugged back in, the red LED will blink continuously.  This indicates that it is in bootloader mode and ready to receive firmware.  Use Flash Multi or your radio to write new firmware to the module.
 
 ## Video
@@ -71,3 +73,6 @@ This video shows the BootReloader working, including the state of the MULTI-Modu
 If the process goes wrong there is a chance that the bootloader will become corrupt.  If this happens the module will be unusable until you use a USB-to-Serial adapter (e.g. CP2102 or CH340G) to reprogram the it.  Depending on your MULTI-Module, you may have to solder pins onto it in order to do this.
 
 Effectively you will need to take the same steps as if you were upgrading the bootloader the 'old' way.
+
+### Red LED remains on
+It has been reported that on some MULTI-Modules (e.g. URUAV TMX5) the red LED remains on at the end of the flashing process.  If the red LED has been on solid (not blinking) for 30sec or more, it is safe to unplug the module and continue with flashing the firmware.
